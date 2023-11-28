@@ -1,0 +1,11 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "notes app api",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "hugo lazzari",
+  "license": "ISC"
+}
