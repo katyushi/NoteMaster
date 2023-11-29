@@ -1,4 +1,4 @@
-# note_master
+# notemaster
 
 ## Project setup
 ```
