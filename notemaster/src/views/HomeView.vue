@@ -40,7 +40,6 @@ export default {
   },
   computed: {
     hasNotes() {
-      console.log(this.notes && this.notes.length > 0);
       return this.notes && this.notes.length > 0;
     },
   },

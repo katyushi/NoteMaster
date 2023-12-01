@@ -41,6 +41,7 @@
 <script>
 import { openDB } from "idb";
 import DeleteConfirmationModal from "@/components/DeleteConfirmationModal.vue";
+import { mixinsDb } from '@/mixins/mixinsDb';
 
 export default {
   name: 'ListAllNotesView',
@@ -77,14 +78,11 @@ export default {
     },
     async addNote() {
       try {
-        const db = await openDB("notes-db", 1);
-        const tx = db.transaction("notes", "readwrite");
-        const store = tx.objectStore("notes");
+        const storeName = "notes";
         const newNote = { ...this.newNote, id: Date.now() };
-        await store.add(newNote);
-        await tx.done;
+        await this.addData(storeName, newNote);
         this.notes.push(newNote);
-        this.newNote = { title: "", content: "", category: "" };
+        this.newNote = { title: "", content: "" };
       } catch (error) {
         console.error("Error adding note to IndexedDB:", error);
       }
@@ -95,13 +93,10 @@ export default {
 
       if (newTitle !== null && newContent !== null) {
         try {
-          const db = await openDB("notes-db", 1);
-          const tx = db.transaction("notes", "readwrite");
-          const store = tx.objectStore("notes");
+          const storeName = "notes";
           note.title = newTitle;
           note.content = newContent;
-          await store.put(note);
-          await tx.done;
+          await this.updateData(storeName, note);
         } catch (error) {
           console.error("Error editing note in IndexedDB:", error);
         }
@@ -109,11 +104,8 @@ export default {
     },
     async deleteNote(noteId) {
       try {
-        const db = await openDB("notes-db", 1);
-        const tx = db.transaction("notes", "readwrite");
-        const store = tx.objectStore("notes");
-        await store.delete(noteId);
-        await tx.done;
+        const storeName = "notes";
+        await this.deleteDataById(storeName, noteId);
         this.notes = this.notes.filter((note) => note.id !== noteId);
       } catch (error) {
         console.error("Error deleting note from IndexedDB:", error);
@@ -138,7 +130,8 @@ export default {
   },
   components: {
     DeleteConfirmationModal
-  }
+  },
+  mixins: [mixinsDb]
 };
 </script>
 

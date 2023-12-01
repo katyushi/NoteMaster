@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import { openDB } from "idb";
 import FormNotes from '@/components/FormNotes.vue';
+import { mixinsDb } from '@/mixins/mixinsDb';
 
 export default {
   name: 'CreateNotesView',
@@ -25,14 +25,11 @@ export default {
   methods: {
     async addNote() {
       try {
-        const db = await openDB("notes-db", 1);
-        const tx = db.transaction("notes", "readwrite");
-        const store = tx.objectStore("notes");
+        const storeName = "notes";
         const newNote = { ...this.newNote, id: Date.now() };
-        await store.add(newNote);
-        await tx.done;
+        await this.addData(storeName, newNote);
         this.notes.push(newNote);
-        this.newNote = { title: "", content: "", category: "" };
+        this.newNote = { title: "", content: "" };
       } catch (error) {
         console.error("Error adding note to IndexedDB:", error);
       }
@@ -44,7 +41,8 @@ export default {
         category: "",
       };
     },
-  }
+  },
+  mixins: [mixinsDb]
 };
 </script>
 

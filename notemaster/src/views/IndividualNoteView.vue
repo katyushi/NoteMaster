@@ -11,6 +11,7 @@
 <script>
 import FormNotes from '@/components/FormNotes.vue';
 import { openDB } from "idb";
+import { mixinsDb } from '@/mixins/mixinsDb';
 
 export default {
   name: 'IndividualNoteView',
@@ -45,11 +46,9 @@ export default {
     async updateNote(updatedNote) {
       try {
         if (this.editedNote && this.editedNote.content !== undefined) {
-          const db = await openDB("notes-db", 1);
-          const tx = db.transaction("notes", "readwrite");
-          const store = tx.objectStore("notes");
-          await store.put(updatedNote);
-          await tx.done;
+          const storeName = "notes";
+          await this.updateData(storeName, updatedNote);
+
           const currentRoute = this.$route.fullPath;
           const targetRoute = { name: "listing" };
 
@@ -57,7 +56,7 @@ export default {
             this.$router.push(targetRoute).catch(err => {});
           }
         } else {
-          console.error("Can't delete undefined or null note.");
+          console.error("Can't update undefined or null note.");
         }
       } catch (error) {
         console.error("Error updating note in IndexedDB:", error);
@@ -66,11 +65,8 @@ export default {
     async deleteNote() {
       try {
         if (this.editedNote && this.editedNote.content !== undefined) {
-          const db = await openDB("notes-db", 1);
-          const tx = db.transaction("notes", "readwrite");
-          const store = tx.objectStore("notes");
-          await store.delete(this.editedNote.id);
-          await tx.done;
+          const storeName = "notes";
+          await this.deleteDataById(storeName, this.editedNote.id);
           this.$router.push({ name: "listing" });
         } else {
           console.error("Can't delete undefined or null note.");
@@ -80,5 +76,6 @@ export default {
       }
     },
   },
+  mixins: [mixinsDb]
 };
 </script>

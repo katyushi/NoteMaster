@@ -10,6 +10,55 @@
   </div>
 </template>
 
+<script>
+export default {
+  methods: {
+    async initializeIndexedDB() {
+      const dbName = 'notes-db';
+      const tableName = 'notes';
+      const dbVersion = 1;
+
+      // Open or create the database
+      const db = await new Promise((resolve, reject) => {
+        const request = indexedDB.open(dbName, dbVersion);
+
+        request.onerror = (event) => {
+          console.error('Error opening IndexedDB:', event.target.error);
+          reject(event.target.error);
+        };
+
+        request.onsuccess = (event) => {
+          const db = event.target.result;
+          resolve(db);
+        };
+
+        request.onupgradeneeded = (event) => {
+          const db = event.target.result;
+
+          // Check if the table exists, if not, create it
+          if (!db.objectStoreNames.contains(tableName)) {
+            const objectStore = db.createObjectStore(tableName, { keyPath: 'id', autoIncrement: true });
+
+            // Add two fields to the table
+            objectStore.createIndex('title', 'content', { unique: false });
+            objectStore.createIndex('content', 'content', { unique: false });
+            objectStore.createIndex('category', 'category', { unique: false });
+          }
+        };
+      });
+
+      console.log('IndexedDB initialized and table created:', db);
+
+      // Close the database when done
+      db.close();
+    },
+  },
+  created() {
+    this.initializeIndexedDB();
+  },
+};
+</script>
+
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
