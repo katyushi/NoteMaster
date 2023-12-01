@@ -1,10 +1,10 @@
 <template>
   <div id="app">
     <nav>
-      <router-link to="/">Home</router-link>
-      <router-link to="/about">About</router-link>
-      <router-link to="/notes">viewNotes</router-link>
-      <router-link to="/notes/new">newNotes</router-link>
+      <p>Anotações</p>
+      <router-link to="/">
+        <span class="material-symbols-outlined">home</span>
+      </router-link>
     </nav>
     <router-view id="mainContent"/>
   </div>
@@ -18,38 +18,41 @@
   text-align: center;
   color: #2c3e50;
   display: flex;
-  flex-direction: row;
-  height: 100vh;
-  width: 100vw;
+  flex-direction: column;
   gap: 5px;
   background-color: #f2f2f2;
+  width: 100vw;
+  height: 100vh;
 }
 
 nav {
-  height: 100%;
-  padding: 5px;
+  padding: 10px 15px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  justify-content: space-around;
-  background-color: #487862;
+  justify-content: space-between;
+  background-color: #505e57;
 }
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
+nav p,
+nav span {
+  color: white;
+  font-weight: 500;
+  font-size: 25px;
 }
 
 #mainContent {
-  height: 100%;
-  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  height: 100vh;
+}
+
+@media (max-width: 768px) {
+  #mainContent,
+  #app {
+    height: auto;
+  }
 }
 </style>

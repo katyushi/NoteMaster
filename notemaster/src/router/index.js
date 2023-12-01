@@ -20,17 +20,17 @@ const routes = [
   },
   {
     path: '/notes',
-    name: 'list all notes',
+    name: 'listing',
     component: () => import(/* webpackChunkName: "viewNotes" */ '../views/ListAllNotesView.vue'),
   },
   {
     path: '/notes/new',
-    name: 'create new notes',
+    name: 'create',
     component: () => import(/* webpackChunkName: "newNotes" */ '../views/CreateNotesView.vue'),
   },
   {
-    path: '/notes/:id',
-    name: 'view specific note',
+    path: '/notes/edit/:id',
+    name: 'edit',
     component: () => import(/* webpackChunkName: "note" */ '../views/IndividualNoteView.vue'),
   },
 ];
